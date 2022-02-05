@@ -18,17 +18,18 @@ const Home: NextPage = () => {
 		getPokemonList();
 	}, [])
 
-
 	return (
-		<div className="grid grid-cols-4 gap-4 content-center">
-			{pokemonList.map((pokemon: PokemonItemTypes, index) => (
-				<PokemonItem
-					id={index + 1}
-					key={index}
-					name={pokemon.name}
-					url={pokemon.url}
-				/>
-			))}
+		<div className="container mx-auto">
+			<div className="grid grid-cols-4 gap-4 content-center">
+				{pokemonList.map((pokemon: PokemonItemTypes, index) => (
+					<PokemonItem
+						id={index + 1}
+						key={index}
+						name={pokemon.name}
+						url={pokemon.url}
+					/>
+				))}
+			</div>
 		</div>
 	)
 }
