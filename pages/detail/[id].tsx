@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
-import { getPokemonDetails } from '../../services/pokemon';
+import { catchPokemon, getPokemonDetails } from '../../services/pokemon';
 import { PokemonAbilities, PokemonDetailsTypes, PokemonMoves, PokemonStats, PokemonTypes } from '../../services/data-types';
 
 
@@ -13,8 +13,20 @@ export default function Detail(props: PokemonDetailsProps) {
 
     const { pokemonDetails } = props;
 
+    const onSubmit = async () => {
+        const tryCatchPokemon = await catchPokemon();
+        console.log(tryCatchPokemon);
+    }
+
     return (
         <div className="container mx-auto">
+
+            <button
+                className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                onClick={onSubmit}
+            >
+                Catch
+            </button>
             <h1 className="text-center">{pokemonDetails.name}</h1>
 
             <div>
