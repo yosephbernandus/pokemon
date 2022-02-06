@@ -17,6 +17,8 @@ export default function Detail(props: PokemonDetailsProps) {
     const [ownedPokemon, setOwnedPokemon] = useState(false);
     const [showForm, setShowForm] = useState(false);
     const [pokemonName, setPokemonName] = useState('');
+    const [renamePokemonCount, setRenamePokemonCount] = useState('');
+    const [myPokemonName, setMyPokemonName] = useState('');
     const router = useRouter();
 
     const pokemonCatch = async () => {
@@ -48,6 +50,22 @@ export default function Detail(props: PokemonDetailsProps) {
         }
     }
 
+    const renamePokemon = async () => {
+        if (!myPokemonName) {
+            alert('Please enter a name for your pokemon')
+        }
+
+        let renamedCount;
+        if (!renamePokemonCount) {
+            // Name pokemon not renamed, from first catch
+            renamedCount = "0";
+        } else {
+            renamedCount = renamePokemonCount;
+        }
+
+        console.log(renamedCount)
+    }
+
 
     const released = async () => {
         const tryReleasedPokemon = await releasedPokemon();
@@ -74,13 +92,14 @@ export default function Detail(props: PokemonDetailsProps) {
         }
     }
 
-
     useEffect(() => {
         const pokemonLocalItem = localStorage.getItem('my-pokemon-list');
         if (pokemonLocalItem) {
             const pokemonItem = JSON.parse(pokemonLocalItem!);
             if (pokemonItem.filter((item: PokemonDetailsTypes) => item.id === pokemonDetails.id).length > 0) {
                 setOwnedPokemon(true);
+                setMyPokemonName(pokemonItem[0].my_pokemon_name);
+                setRenamePokemonCount(pokemonItem[0].count_edited_name);
             }
         }
     }, []);
@@ -89,12 +108,39 @@ export default function Detail(props: PokemonDetailsProps) {
         <div className="container mx-auto">
 
             {ownedPokemon ? (
-                <button
-                    className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                    onClick={released}
-                >
-                    Released
-                </button>
+                <>
+                    <button
+                        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                        onClick={released}
+                    >
+                        Released
+                    </button>
+
+                    <div className="w-full max-w-xs">
+                        <form className="bg-white rounded px-8 pt-6 pb-8 mb-4">
+                            <div className="mb-4">
+                                <label>Rename Pokemon</label>
+                                <input
+                                    placeholder="Pokemon Name"
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="pokemon_name"
+                                    type="text"
+                                    value={myPokemonName}
+                                    onChange={(event) => setMyPokemonName(event.target.value)}
+                                />
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <button
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                    type="button"
+                                    onClick={renamePokemon}
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </>
             ) : (
                 <>
                     <button
@@ -133,6 +179,9 @@ export default function Detail(props: PokemonDetailsProps) {
             )}
 
             <h1 className="text-center">{pokemonDetails.name}</h1>
+            {ownedPokemon ? (
+                <p className="text-center text-gray-500 text-xs">Owned by me, name: {myPokemonName}</p>
+            ) : ""}
 
             <p>{pokemonMessage}</p>
             <div>
