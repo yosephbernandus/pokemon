@@ -63,3 +63,17 @@
     text-transform: capitalize;
     border-radius: 8px;
 }
+
+h1.title {
+    font-weight: bold;
+    text-transform: capitalize;
+    padding-bottom: 10px;
+}
+
+.stat-transform {
+    text-transform: capitalize;
+}
+
+.detail-section {
+    margin-bottom: 20px;
+}

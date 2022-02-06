@@ -20,6 +20,7 @@ export default function Detail(props: PokemonDetailsProps) {
     const [pokemonName, setPokemonName] = useState('');
     const [renamePokemonCount, setRenamePokemonCount] = useState('');
     const [myPokemonName, setMyPokemonName] = useState('');
+    const [messageColor, setMessageColor] = useState('');
     const router = useRouter();
 
     const pokemonCatch = async () => {
@@ -27,8 +28,10 @@ export default function Detail(props: PokemonDetailsProps) {
         setPokemonMessage(tryCatchPokemon.message);
         if (tryCatchPokemon.code === 'catched') {
             setShowForm(true)
+            setMessageColor('text-indigo-500')
         } else {
             setShowForm(false)
+            setMessageColor('text-red-500')
         }
     }
 
@@ -122,21 +125,36 @@ export default function Detail(props: PokemonDetailsProps) {
 
 
     return (
-        <div className="container mx-auto">
+        <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 content-center">
+
+                <h1 className="text-center title">{pokemonDetails.name}</h1>
+                {ownedPokemon ? (
+                    <p style={{ marginBottom: '20px' }} className="text-center text-gray-500 text-xs">Owned by me, name: {myPokemonName}</p>
+                ) : ""}
+
+
+                {pokemonMessage ? (
+                    <div className="lg:rounded-full flex lg:inline-flex" role="alert" style={{ marginBottom: '10px' }}>
+                        <span className={`font-semibold mr-2 text-center ${messageColor} flex-auto`}>{pokemonMessage}</span>
+                    </div>
+                ) : ""}
+
 
                 {ownedPokemon ? (
                     <>
-                        <button
-                            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                            onClick={released}
-                        >
-                            Released
-                        </button>
+                        <div className="content-center text-center">
+                            <button
+                                className="max-w-xs bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                                onClick={released}
+                            >
+                                Released
+                            </button>
+                        </div>
 
                         <div className="w-full max-w-xs">
                             <form className="bg-white rounded px-8 pt-6 pb-8 mb-4">
-                                <div className="mb-4">
+                                <div className="text-center">
                                     <label>Rename Pokemon</label>
                                     <input
                                         placeholder="Pokemon Name"
@@ -147,7 +165,7 @@ export default function Detail(props: PokemonDetailsProps) {
                                         onChange={(event) => setMyPokemonName(event.target.value)}
                                     />
                                 </div>
-                                <div className="flex items-center justify-between">
+                                <div className="content-center text-center">
                                     <button
                                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                         type="button"
@@ -161,12 +179,14 @@ export default function Detail(props: PokemonDetailsProps) {
                     </>
                 ) : (
                     <>
-                        <button
-                            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                            onClick={pokemonCatch}
-                        >
-                            Catch
-                        </button>
+                        <div className="content-center text-center">
+                            <button
+                                className="max-w-xs bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                                onClick={pokemonCatch}
+                            >
+                                Catch
+                            </button>
+                        </div>
 
                         {showForm ? (
                             <div className="w-full max-w-xs">
@@ -196,13 +216,7 @@ export default function Detail(props: PokemonDetailsProps) {
                     </>
                 )}
 
-                <h1 className="text-center">{pokemonDetails.name}</h1>
-                {ownedPokemon ? (
-                    <p className="text-center text-gray-500 text-xs">Owned by me, name: {myPokemonName}</p>
-                ) : ""}
-
-                <p>{pokemonMessage}</p>
-                <div>
+                <div className="detail-section">
                     <h1>Abilities</h1>
                     <div className="span-box">
                         {pokemonDetails.abilities.map((item: PokemonAbilities, index) => (
@@ -211,7 +225,7 @@ export default function Detail(props: PokemonDetailsProps) {
                     </div>
                 </div>
 
-                <div>
+                <div className="detail-section">
                     <h1>Move</h1>
                     <div className="span-box">
                         {pokemonDetails.moves.map((item: PokemonMoves, index) => (
@@ -220,7 +234,7 @@ export default function Detail(props: PokemonDetailsProps) {
                     </div>
                 </div>
 
-                <div>
+                <div className="detail-section">
                     <h1>Types</h1>
                     <div className="span-box">
                         {pokemonDetails.types.map((item: PokemonTypes, index) => (
@@ -229,11 +243,12 @@ export default function Detail(props: PokemonDetailsProps) {
                     </div>
                 </div>
 
-                <div>
+                <div className="detail-section">
                     <h1>Stats</h1>
+                    <br />
                     {pokemonDetails.stats.map((item: PokemonStats, index) => (
                         <div key={index}>
-                            <p>{item.stat.name}</p>
+                            <p className="stat-transform">{item.stat.name} ({item.base_stat}%)</p>
                             <div className="w-full bg-gray-200 h-1 mb-6">
                                 <div className="bg-blue-400 h-1" style={{ width: `${item.base_stat}%` }}></div>
                             </div>
