@@ -12,7 +12,7 @@ interface RenameTypes {
 }
 
 export async function getPokemons() {
-    const URL = 'pokemon?limit=20';
+    const URL = 'pokemon?limit=30';
 
     const response = await axios.get(`${ROOT_API}/${API_VERSION}/${URL}`);
     const axiosResponse = response.data.results;

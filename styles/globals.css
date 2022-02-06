@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.image-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.section-image-box {
+    border: 14px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.detail-box {
+    cursor: pointer;
+    display: block;
+    min-height: 150px;
+    padding: 0.7rem 0.5rem;
+    border-radius: 6px;
+    border: 0.5px solid #ccc;
+    box-shadow: 0.2px 3px 2.5px rgb(100 100 100 / 50%);
+    margin: 8px 6px;
+}
+
+.detail-box:hover {
+    box-shadow: 0.2px 3px 2.5px rgb(100 100 100 / 100%);
+}
