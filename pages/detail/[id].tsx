@@ -15,27 +15,41 @@ export default function Detail(props: PokemonDetailsProps) {
     const { pokemonDetails } = props;
     const [pokemonMessage, setPokemonMessage] = useState('');
     const [ownedPokemon, setOwnedPokemon] = useState(false);
+    const [showForm, setShowForm] = useState(false);
+    const [pokemonName, setPokemonName] = useState('');
     const router = useRouter();
 
-    const onSubmitCatch = async () => {
+    const pokemonCatch = async () => {
         const tryCatchPokemon = await catchPokemon();
-        if (tryCatchPokemon.code === 'catched') {
-            if (checkPokemon(pokemonDetails.id)) {
-                const pokemonLocalItem = localStorage.getItem('my-pokemon-list');
-                const oldPokemonList = pokemonLocalItem ? JSON.parse(pokemonLocalItem) : [];
-                if (oldPokemonList) {
-                    oldPokemonList.push(pokemonDetails);
-                    localStorage.setItem('my-pokemon-list', JSON.stringify(oldPokemonList));
-                } else {
-                    localStorage.setItem('my-pokemon-list', JSON.stringify([pokemonDetails]));
-                }
-                router.push("/my-pokemon")
-            }
-        }
         setPokemonMessage(tryCatchPokemon.message);
+        if (tryCatchPokemon.code === 'catched') {
+            setShowForm(true)
+        } else {
+            setShowForm(false)
+        }
     }
 
-    const onSubmitReleased = async () => {
+    const submitPokemon = async () => {
+        if (!pokemonName) {
+            alert('Please enter a name for your pokemon')
+        }
+        pokemonDetails.my_pokemon_name = pokemonName;
+        pokemonDetails.count_edited_name = "";
+        if (checkPokemon(pokemonDetails.id)) {
+            const pokemonLocalItem = localStorage.getItem('my-pokemon-list');
+            const oldPokemonList = pokemonLocalItem ? JSON.parse(pokemonLocalItem) : [];
+            if (oldPokemonList) {
+                oldPokemonList.push(pokemonDetails);
+                localStorage.setItem('my-pokemon-list', JSON.stringify(oldPokemonList));
+            } else {
+                localStorage.setItem('my-pokemon-list', JSON.stringify([pokemonDetails]));
+            }
+            router.push("/my-pokemon")
+        }
+    }
+
+
+    const released = async () => {
         const tryReleasedPokemon = await releasedPokemon();
         if (tryReleasedPokemon.code === 'released') {
             const pokemonLocalItem = localStorage.getItem('my-pokemon-list');
@@ -63,9 +77,11 @@ export default function Detail(props: PokemonDetailsProps) {
 
     useEffect(() => {
         const pokemonLocalItem = localStorage.getItem('my-pokemon-list');
-        const pokemonItem = JSON.parse(pokemonLocalItem!);
-        if (pokemonItem.filter((item: PokemonDetailsTypes) => item.id === pokemonDetails.id).length > 0) {
-            setOwnedPokemon(true);
+        if (pokemonLocalItem) {
+            const pokemonItem = JSON.parse(pokemonLocalItem!);
+            if (pokemonItem.filter((item: PokemonDetailsTypes) => item.id === pokemonDetails.id).length > 0) {
+                setOwnedPokemon(true);
+            }
         }
     }, []);
 
@@ -75,17 +91,45 @@ export default function Detail(props: PokemonDetailsProps) {
             {ownedPokemon ? (
                 <button
                     className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                    onClick={onSubmitReleased}
+                    onClick={released}
                 >
                     Released
                 </button>
             ) : (
-                <button
-                    className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                    onClick={onSubmitCatch}
-                >
-                    Catch
-                </button>
+                <>
+                    <button
+                        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                        onClick={pokemonCatch}
+                    >
+                        Catch
+                    </button>
+
+                    {showForm ? (
+                        <div className="w-full max-w-xs">
+                            <form className="bg-white rounded px-8 pt-6 pb-8 mb-4">
+                                <div className="mb-4">
+                                    <input
+                                        placeholder="Pokemon Name"
+                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        id="pokemon_name"
+                                        type="text"
+                                        value={pokemonName}
+                                        onChange={(event) => setPokemonName(event.target.value)}
+                                    />
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <button
+                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                        type="button"
+                                        onClick={submitPokemon}
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    ) : ""}
+                </>
             )}
 
             <h1 className="text-center">{pokemonDetails.name}</h1>

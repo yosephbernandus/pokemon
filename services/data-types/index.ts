@@ -40,6 +40,8 @@ export interface PokemonStats {
 
 export interface PokemonDetailsTypes {
     id: string;
+    my_pokemon_name: string;
+    count_edited_name?: string;
     name: string;
     abilities: PokemonAbilities[];
     moves: PokemonMoves[];
