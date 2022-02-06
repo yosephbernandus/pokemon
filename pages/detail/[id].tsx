@@ -128,10 +128,12 @@ export default function Detail(props: PokemonDetailsProps) {
         }
     }, []);
 
-
+    const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL;
     return (
         <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 content-center">
+
+                <img className="image-center" src={`${imageUrl}${pokemonDetails.id}.svg`} alt={pokemonDetails.name} width={100} height={100} style={{ marginBottom: '15px' }} />
 
                 <h1 className="text-center title">{pokemonDetails.name}</h1>
                 {ownedPokemon ? (
