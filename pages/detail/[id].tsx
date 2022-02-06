@@ -13,9 +13,10 @@ export default function Detail(props: PokemonDetailsProps) {
 
 
     const { pokemonDetails } = props;
-    const [showPokemonList, setPokemonList] = useState([]);
     const [pokemonMessage, setPokemonMessage] = useState('');
-    const onSubmit = async () => {
+    const [ownedPokemon, setOwnedPokemon] = useState(false);
+
+    const onSubmitCatch = async () => {
         const tryCatchPokemon = await catchPokemon();
         if (tryCatchPokemon.code === 'catched') {
             console.log(tryCatchPokemon)
@@ -35,30 +36,50 @@ export default function Detail(props: PokemonDetailsProps) {
         setPokemonMessage(tryCatchPokemon.message);
     }
 
+    const onSubmitReleased = async () => {
+        console.log('released')
+    }
+
     const checkPokemon = (id: string) => {
         const pokemonLocalItem = localStorage.getItem('my-pokemon-list');
         if (!pokemonLocalItem) {
             return true
         }
         const pokemonItem = JSON.parse(pokemonLocalItem!);
-        if (pokemonItem.filter(item => item.id === id).length > 0) {
+        if (pokemonItem.filter((item: PokemonDetailsTypes) => item.id === id).length > 0) {
             return false
         } else {
             return true
         }
     }
 
+    useEffect(() => {
+        const pokemonLocalItem = localStorage.getItem('my-pokemon-list');
+        const pokemonItem = JSON.parse(pokemonLocalItem!);
+        if (pokemonItem.filter((item: PokemonDetailsTypes) => item.id === pokemonDetails.id).length > 0) {
+            setOwnedPokemon(true);
+        }
+    }, []);
 
+    console.log(ownedPokemon)
     return (
         <div className="container mx-auto">
 
-            <button
-                className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                onClick={onSubmit}
-            >
-                Catch
-            </button>
-
+            {ownedPokemon ? (
+                <button
+                    className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                    onClick={onSubmitReleased}
+                >
+                    Released
+                </button>
+            ) : (
+                <button
+                    className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                    onClick={onSubmitCatch}
+                >
+                    Catch
+                </button>
+            )}
 
             <h1 className="text-center">{pokemonDetails.name}</h1>
 

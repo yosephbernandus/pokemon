@@ -1,4 +1,5 @@
 export interface PokemonItemTypes {
+    id: string;
     name: string;
     url: string;
 }
