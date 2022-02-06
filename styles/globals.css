@@ -68,6 +68,7 @@ h1.title {
     font-weight: bold;
     text-transform: capitalize;
     padding-bottom: 10px;
+    font-size: 28px;
 }
 
 .stat-transform {
@@ -76,4 +77,10 @@ h1.title {
 
 .detail-section {
     margin-bottom: 20px;
+}
+
+.input-pokemon {
+    margin-bottom: 15px;
+    width: 300px;
+    text-align: center;
 }

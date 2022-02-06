@@ -16,6 +16,7 @@ export default function Detail(props: PokemonDetailsProps) {
     const { pokemonDetails } = props;
     const [pokemonMessage, setPokemonMessage] = useState('');
     const [ownedPokemon, setOwnedPokemon] = useState(false);
+    const [showButtonCatch, setShowButtonCatch] = useState(true)
     const [showForm, setShowForm] = useState(false);
     const [pokemonName, setPokemonName] = useState('');
     const [renamePokemonCount, setRenamePokemonCount] = useState('');
@@ -29,15 +30,18 @@ export default function Detail(props: PokemonDetailsProps) {
         if (tryCatchPokemon.code === 'catched') {
             setShowForm(true)
             setMessageColor('text-indigo-500')
+            setShowButtonCatch(false)
         } else {
             setShowForm(false)
             setMessageColor('text-red-500')
+            setShowButtonCatch(true)
         }
     }
 
     const submitPokemon = async () => {
         if (!pokemonName) {
             alert('Please enter a name for your pokemon')
+            return;
         }
         pokemonDetails.my_pokemon_name = pokemonName;
         pokemonDetails.count_edited_name = "";
@@ -57,6 +61,7 @@ export default function Detail(props: PokemonDetailsProps) {
     const renamePokemon = async () => {
         if (!myPokemonName) {
             alert('Please enter a name for your pokemon')
+            return;
         }
 
         let renamedCount;
@@ -152,18 +157,20 @@ export default function Detail(props: PokemonDetailsProps) {
                             </button>
                         </div>
 
-                        <div className="w-full max-w-xs">
+                        <div className="w-full">
                             <form className="bg-white rounded px-8 pt-6 pb-8 mb-4">
                                 <div className="text-center">
-                                    <label>Rename Pokemon</label>
-                                    <input
-                                        placeholder="Pokemon Name"
-                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        id="pokemon_name"
-                                        type="text"
-                                        value={myPokemonName}
-                                        onChange={(event) => setMyPokemonName(event.target.value)}
-                                    />
+                                    <p>Rename Pokemon</p>
+                                    <div>
+                                        <input
+                                            placeholder="Pokemon Name"
+                                            className="input-pokemon shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                            id="pokemon_name"
+                                            type="text"
+                                            value={myPokemonName}
+                                            onChange={(event) => setMyPokemonName(event.target.value)}
+                                        />
+                                    </div>
                                 </div>
                                 <div className="content-center text-center">
                                     <button
@@ -179,29 +186,33 @@ export default function Detail(props: PokemonDetailsProps) {
                     </>
                 ) : (
                     <>
-                        <div className="content-center text-center">
-                            <button
-                                className="max-w-xs bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                                onClick={pokemonCatch}
-                            >
-                                Catch
-                            </button>
-                        </div>
+                        {showButtonCatch ? (
+                            <div className="content-center text-center">
+                                <button
+                                    className="max-w-xs bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                                    onClick={pokemonCatch}
+                                >
+                                    Catch
+                                </button>
+                            </div>
+                        ) : ""}
 
                         {showForm ? (
-                            <div className="w-full max-w-xs">
+                            <div className="w-full">
                                 <form className="bg-white rounded px-8 pt-6 pb-8 mb-4">
-                                    <div className="mb-4">
-                                        <input
-                                            placeholder="Pokemon Name"
-                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                            id="pokemon_name"
-                                            type="text"
-                                            value={pokemonName}
-                                            onChange={(event) => setPokemonName(event.target.value)}
-                                        />
+                                    <div className="text-center">
+                                        <div>
+                                            <input
+                                                placeholder="Pokemon Name"
+                                                className="input-pokemon shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                id="pokemon_name"
+                                                type="text"
+                                                value={pokemonName}
+                                                onChange={(event) => setPokemonName(event.target.value)}
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="flex items-center justify-between">
+                                    <div className="content-center text-center">
                                         <button
                                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                             type="button"
