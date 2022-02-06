@@ -6,6 +6,11 @@ const PROCESS_API_VERSION = 'api/v1'
 const API_VERSION = 'api/v2';
 
 
+interface RenameTypes {
+    renamedCount: string;
+    myPokemonName: string;
+}
+
 export async function getPokemons() {
     const URL = 'pokemon?limit=20';
 
@@ -38,6 +43,19 @@ export async function releasedPokemon() {
     const URL = 'pokemon/released';
 
     const response = await axios.post(`${PROCESS_POKEMON_API}/${PROCESS_API_VERSION}/${URL}`);
+    const axiosResponse = response.data;
+
+    return axiosResponse;
+}
+
+export async function editPokemonName(data: RenameTypes) {
+    const URL = 'pokemon/rename';
+
+    const response = await axios({
+        url: `${PROCESS_POKEMON_API}/${PROCESS_API_VERSION}/${URL}`,
+        method: 'POST',
+        data: data,
+    });
     const axiosResponse = response.data;
 
     return axiosResponse;

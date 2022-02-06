@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
-import { catchPokemon, getPokemonDetails, releasedPokemon } from '../../services/pokemon';
+import { catchPokemon, editPokemonName, getPokemonDetails, releasedPokemon } from '../../services/pokemon';
 import { PokemonAbilities, PokemonDetailsTypes, PokemonMoves, PokemonStats, PokemonTypes } from '../../services/data-types';
+import { route } from 'next/dist/server/router';
 
 
 interface PokemonDetailsProps {
@@ -63,9 +64,24 @@ export default function Detail(props: PokemonDetailsProps) {
             renamedCount = renamePokemonCount;
         }
 
-        console.log(renamedCount)
-    }
+        const data = {
+            renamedCount,
+            myPokemonName
+        }
 
+        const response = await editPokemonName(data);
+        const pokemonLocalItem = localStorage.getItem('my-pokemon-list');
+        const pokemonItem = JSON.parse(pokemonLocalItem!);
+        for (let i = 0; i < pokemonItem.length; i++) {
+            if (pokemonItem[i].id == pokemonDetails.id) {
+                pokemonItem[i].my_pokemon_name = response.pokemonName
+                pokemonItem[i].count_edited_name = response.renamedCount
+                break;
+            }
+        }
+        localStorage.setItem('my-pokemon-list', JSON.stringify(pokemonItem));
+        router.push("/my-pokemon")
+    }
 
     const released = async () => {
         const tryReleasedPokemon = await releasedPokemon();

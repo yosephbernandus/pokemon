@@ -17,13 +17,13 @@ export default function MyPokemon() {
     return (
         <div className="container mx-auto">
             <div className="grid grid-cols-4 gap-4 content-center">
-                {pokemonList.map((pokemon: PokemonItemTypes) => (
+                {pokemonList ? pokemonList.map((pokemon: PokemonItemTypes) => (
                     <PokemonItem
                         id={parseInt(pokemon.id)}
                         name={pokemon.name}
                         url={pokemon.url}
                     />
-                ))}
+                )) : ""}
             </div>
         </div>
     )
