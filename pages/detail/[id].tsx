@@ -11,12 +11,43 @@ interface PokemonDetailsProps {
 
 export default function Detail(props: PokemonDetailsProps) {
 
-    const { pokemonDetails } = props;
 
+    const { pokemonDetails } = props;
+    const [showPokemonList, setPokemonList] = useState([]);
+    const [pokemonMessage, setPokemonMessage] = useState('');
     const onSubmit = async () => {
         const tryCatchPokemon = await catchPokemon();
-        console.log(tryCatchPokemon);
+        if (tryCatchPokemon.code === 'catched') {
+            console.log(tryCatchPokemon)
+            if (checkPokemon(pokemonDetails.id)) {
+                console.log(tryCatchPokemon)
+                const pokemonLocalItem = localStorage.getItem('my-pokemon-list');
+                const oldPokemonList = pokemonLocalItem ? JSON.parse(pokemonLocalItem) : [];
+                if (oldPokemonList) {
+                    oldPokemonList.push(pokemonDetails);
+                    console.log(oldPokemonList)
+                    localStorage.setItem('my-pokemon-list', JSON.stringify(oldPokemonList));
+                } else {
+                    localStorage.setItem('my-pokemon-list', JSON.stringify([pokemonDetails]));
+                }
+            }
+        }
+        setPokemonMessage(tryCatchPokemon.message);
     }
+
+    const checkPokemon = (id: string) => {
+        const pokemonLocalItem = localStorage.getItem('my-pokemon-list');
+        if (!pokemonLocalItem) {
+            return true
+        }
+        const pokemonItem = JSON.parse(pokemonLocalItem!);
+        if (pokemonItem.filter(item => item.id === id).length > 0) {
+            return false
+        } else {
+            return true
+        }
+    }
+
 
     return (
         <div className="container mx-auto">
@@ -27,8 +58,11 @@ export default function Detail(props: PokemonDetailsProps) {
             >
                 Catch
             </button>
+
+
             <h1 className="text-center">{pokemonDetails.name}</h1>
 
+            <p>{pokemonMessage}</p>
             <div>
                 <h1>Abilities</h1>
                 {pokemonDetails.abilities.map((item: PokemonAbilities) => (
@@ -73,6 +107,7 @@ interface getServerSideProps {
 export async function getServerSideProps({ params }: getServerSideProps) {
     const response = await getPokemonDetails(params.id);
     const pokemonDetails = {
+        id: params.id,
         name: response.name,
         abilities: response.abilities,
         moves: response.moves,

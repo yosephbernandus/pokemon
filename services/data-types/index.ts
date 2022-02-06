@@ -38,6 +38,7 @@ export interface PokemonStats {
 }
 
 export interface PokemonDetailsTypes {
+    id: string;
     name: string;
     abilities: PokemonAbilities[];
     moves: PokemonMoves[];
