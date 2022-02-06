@@ -202,29 +202,29 @@ export default function Detail(props: PokemonDetailsProps) {
             <p>{pokemonMessage}</p>
             <div>
                 <h1>Abilities</h1>
-                {pokemonDetails.abilities.map((item: PokemonAbilities) => (
-                    <p>#{item.ability.name}</p>
+                {pokemonDetails.abilities.map((item: PokemonAbilities, index) => (
+                    <p key={index}>#{item.ability.name}</p>
                 ))}
             </div>
 
             <div>
                 <h1>Move</h1>
-                {pokemonDetails.moves.map((item: PokemonMoves) => (
-                    <p>#{item.move.name}</p>
+                {pokemonDetails.moves.map((item: PokemonMoves, index) => (
+                    <p key={index}>#{item.move.name}</p>
                 ))}
             </div>
 
             <div>
                 <h1>Types</h1>
-                {pokemonDetails.types.map((item: PokemonTypes) => (
-                    <p>#{item.type.name}</p>
+                {pokemonDetails.types.map((item: PokemonTypes, index) => (
+                    <p key={index}>#{item.type.name}</p>
                 ))}
             </div>
 
             <div>
                 <h1>Stats</h1>
-                {pokemonDetails.stats.map((item: PokemonStats) => (
-                    <div>
+                {pokemonDetails.stats.map((item: PokemonStats, index) => (
+                    <div key={index}>
                         <p>{item.stat.name}</p>
                         <p>{item.base_stat}</p>
                     </div>

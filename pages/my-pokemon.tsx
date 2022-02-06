@@ -19,6 +19,7 @@ export default function MyPokemon() {
             <div className="grid grid-cols-4 gap-4 content-center">
                 {pokemonList ? pokemonList.map((pokemon: PokemonItemTypes) => (
                     <PokemonItem
+                        key={pokemon.id}
                         id={parseInt(pokemon.id)}
                         name={pokemon.name}
                         url={pokemon.url}
