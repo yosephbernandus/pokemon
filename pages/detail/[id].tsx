@@ -120,115 +120,126 @@ export default function Detail(props: PokemonDetailsProps) {
         }
     }, []);
 
+
     return (
         <div className="container mx-auto">
+            <div className="grid grid-cols-1 content-center">
 
-            {ownedPokemon ? (
-                <>
-                    <button
-                        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                        onClick={released}
-                    >
-                        Released
-                    </button>
+                {ownedPokemon ? (
+                    <>
+                        <button
+                            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                            onClick={released}
+                        >
+                            Released
+                        </button>
 
-                    <div className="w-full max-w-xs">
-                        <form className="bg-white rounded px-8 pt-6 pb-8 mb-4">
-                            <div className="mb-4">
-                                <label>Rename Pokemon</label>
-                                <input
-                                    placeholder="Pokemon Name"
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="pokemon_name"
-                                    type="text"
-                                    value={myPokemonName}
-                                    onChange={(event) => setMyPokemonName(event.target.value)}
-                                />
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <button
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                    type="button"
-                                    onClick={renamePokemon}
-                                >
-                                    Submit
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </>
-            ) : (
-                <>
-                    <button
-                        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                        onClick={pokemonCatch}
-                    >
-                        Catch
-                    </button>
-
-                    {showForm ? (
                         <div className="w-full max-w-xs">
                             <form className="bg-white rounded px-8 pt-6 pb-8 mb-4">
                                 <div className="mb-4">
+                                    <label>Rename Pokemon</label>
                                     <input
                                         placeholder="Pokemon Name"
                                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         id="pokemon_name"
                                         type="text"
-                                        value={pokemonName}
-                                        onChange={(event) => setPokemonName(event.target.value)}
+                                        value={myPokemonName}
+                                        onChange={(event) => setMyPokemonName(event.target.value)}
                                     />
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <button
                                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                         type="button"
-                                        onClick={submitPokemon}
+                                        onClick={renamePokemon}
                                     >
                                         Submit
                                     </button>
                                 </div>
                             </form>
                         </div>
-                    ) : ""}
-                </>
-            )}
+                    </>
+                ) : (
+                    <>
+                        <button
+                            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                            onClick={pokemonCatch}
+                        >
+                            Catch
+                        </button>
 
-            <h1 className="text-center">{pokemonDetails.name}</h1>
-            {ownedPokemon ? (
-                <p className="text-center text-gray-500 text-xs">Owned by me, name: {myPokemonName}</p>
-            ) : ""}
+                        {showForm ? (
+                            <div className="w-full max-w-xs">
+                                <form className="bg-white rounded px-8 pt-6 pb-8 mb-4">
+                                    <div className="mb-4">
+                                        <input
+                                            placeholder="Pokemon Name"
+                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                            id="pokemon_name"
+                                            type="text"
+                                            value={pokemonName}
+                                            onChange={(event) => setPokemonName(event.target.value)}
+                                        />
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <button
+                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                            type="button"
+                                            onClick={submitPokemon}
+                                        >
+                                            Submit
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        ) : ""}
+                    </>
+                )}
 
-            <p>{pokemonMessage}</p>
-            <div>
-                <h1>Abilities</h1>
-                {pokemonDetails.abilities.map((item: PokemonAbilities, index) => (
-                    <p key={index}>#{item.ability.name}</p>
-                ))}
-            </div>
+                <h1 className="text-center">{pokemonDetails.name}</h1>
+                {ownedPokemon ? (
+                    <p className="text-center text-gray-500 text-xs">Owned by me, name: {myPokemonName}</p>
+                ) : ""}
 
-            <div>
-                <h1>Move</h1>
-                {pokemonDetails.moves.map((item: PokemonMoves, index) => (
-                    <p key={index}>#{item.move.name}</p>
-                ))}
-            </div>
-
-            <div>
-                <h1>Types</h1>
-                {pokemonDetails.types.map((item: PokemonTypes, index) => (
-                    <p key={index}>#{item.type.name}</p>
-                ))}
-            </div>
-
-            <div>
-                <h1>Stats</h1>
-                {pokemonDetails.stats.map((item: PokemonStats, index) => (
-                    <div key={index}>
-                        <p>{item.stat.name}</p>
-                        <p>{item.base_stat}</p>
+                <p>{pokemonMessage}</p>
+                <div>
+                    <h1>Abilities</h1>
+                    <div className="span-box">
+                        {pokemonDetails.abilities.map((item: PokemonAbilities, index) => (
+                            <span className="abilities-tag" key={index}>#{item.ability.name}</span>
+                        ))}
                     </div>
-                ))}
+                </div>
+
+                <div>
+                    <h1>Move</h1>
+                    <div className="span-box">
+                        {pokemonDetails.moves.map((item: PokemonMoves, index) => (
+                            <span className="move-tag" key={index}>#{item.move.name}</span>
+                        ))}
+                    </div>
+                </div>
+
+                <div>
+                    <h1>Types</h1>
+                    <div className="span-box">
+                        {pokemonDetails.types.map((item: PokemonTypes, index) => (
+                            <span className="types-tag" key={index}>#{item.type.name}</span>
+                        ))}
+                    </div>
+                </div>
+
+                <div>
+                    <h1>Stats</h1>
+                    {pokemonDetails.stats.map((item: PokemonStats, index) => (
+                        <div key={index}>
+                            <p>{item.stat.name}</p>
+                            <div className="w-full bg-gray-200 h-1 mb-6">
+                                <div className="bg-blue-400 h-1" style={{ width: `${item.base_stat}%` }}></div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     )
