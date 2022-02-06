@@ -27,7 +27,16 @@ export async function getPokemonDetails(id: string) {
 export async function catchPokemon() {
     const URL = 'pokemon/catch';
 
-    console.log(PROCESS_API_VERSION)
+    const response = await axios.post(`${PROCESS_POKEMON_API}/${PROCESS_API_VERSION}/${URL}`);
+    const axiosResponse = response.data;
+
+    return axiosResponse;
+}
+
+
+export async function releasedPokemon() {
+    const URL = 'pokemon/released';
+
     const response = await axios.post(`${PROCESS_POKEMON_API}/${PROCESS_API_VERSION}/${URL}`);
     const axiosResponse = response.data;
 

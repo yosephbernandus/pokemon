@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
-import { catchPokemon, getPokemonDetails } from '../../services/pokemon';
+import { catchPokemon, getPokemonDetails, releasedPokemon } from '../../services/pokemon';
 import { PokemonAbilities, PokemonDetailsTypes, PokemonMoves, PokemonStats, PokemonTypes } from '../../services/data-types';
 
 
@@ -15,29 +15,36 @@ export default function Detail(props: PokemonDetailsProps) {
     const { pokemonDetails } = props;
     const [pokemonMessage, setPokemonMessage] = useState('');
     const [ownedPokemon, setOwnedPokemon] = useState(false);
+    const router = useRouter();
 
     const onSubmitCatch = async () => {
         const tryCatchPokemon = await catchPokemon();
         if (tryCatchPokemon.code === 'catched') {
-            console.log(tryCatchPokemon)
             if (checkPokemon(pokemonDetails.id)) {
-                console.log(tryCatchPokemon)
                 const pokemonLocalItem = localStorage.getItem('my-pokemon-list');
                 const oldPokemonList = pokemonLocalItem ? JSON.parse(pokemonLocalItem) : [];
                 if (oldPokemonList) {
                     oldPokemonList.push(pokemonDetails);
-                    console.log(oldPokemonList)
                     localStorage.setItem('my-pokemon-list', JSON.stringify(oldPokemonList));
                 } else {
                     localStorage.setItem('my-pokemon-list', JSON.stringify([pokemonDetails]));
                 }
+                router.push("/my-pokemon")
             }
         }
         setPokemonMessage(tryCatchPokemon.message);
     }
 
     const onSubmitReleased = async () => {
-        console.log('released')
+        const tryReleasedPokemon = await releasedPokemon();
+        if (tryReleasedPokemon.code === 'released') {
+            const pokemonLocalItem = localStorage.getItem('my-pokemon-list');
+            const oldPokemonList = pokemonLocalItem ? JSON.parse(pokemonLocalItem) : [];
+            const pokemons = oldPokemonList.filter((item: PokemonDetailsTypes) => item.id !== pokemonDetails.id)
+            localStorage.setItem('my-pokemon-list', JSON.stringify(pokemons));
+            router.push("/")
+        }
+        setPokemonMessage(tryReleasedPokemon.message);
     }
 
     const checkPokemon = (id: string) => {
@@ -53,6 +60,7 @@ export default function Detail(props: PokemonDetailsProps) {
         }
     }
 
+
     useEffect(() => {
         const pokemonLocalItem = localStorage.getItem('my-pokemon-list');
         const pokemonItem = JSON.parse(pokemonLocalItem!);
@@ -61,7 +69,6 @@ export default function Detail(props: PokemonDetailsProps) {
         }
     }, []);
 
-    console.log(ownedPokemon)
     return (
         <div className="container mx-auto">
 
